@@ -1,0 +1,33 @@
+import random
+x = 0
+y = 0
+class chunk():
+	def _init_(self):
+		self.x = ""
+		self.y = ""
+		self.biome = ""
+
+loop = False
+print ("Welcome to Survival! type help to get started")
+while not loop:
+	command = input()
+	if command == "help":
+		print ("forward")
+		print ("back")
+		print ("left")
+		print ("right")
+		print ("collect")
+		print ("build")
+		print ("help")
+	elif command == "forward":
+		x = x + 1
+		print ("your coordinates are: x = ",x,", z = ",y)
+	elif command == "back":
+		x = x - 1
+		print ("your coordinates are: x = ",x,", z = ",y)
+	elif command == "left":
+		y = y + 1
+		print ("your coordinates are: x = ",x,", z = ",y)
+	elif command == "right":
+		y = y - 1
+		print ("your coordinates are: x = ",x,", z = ",y)
