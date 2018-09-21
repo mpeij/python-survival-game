@@ -8,7 +8,6 @@ class chunk():
 		self.biome = ""
 
 loop = False
-print ("Welcome to Survival! type help to get started")
 while not loop:
 	command = input()
 	if command == "help":
