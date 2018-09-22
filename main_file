@@ -27,15 +27,79 @@ while not loop:
 	elif command == "forward":
 		x = x + 1
 		print ("your coordinates are: x = ",x,", y = ",y)
+		newTerrain = True
+		water = False
+		TerrainWater = ["Creek","River","Lake","Stream","Waterfall"]
+		TerrainGround = ["Dirt","Grass","Rocks","Podzol"]
+		TerrainAttribute = ["Trees","Cliffs"]
+		
+		
+		if newTerrain == True:
+			water = random.choice([True, False])
+			TGF = random.choice(TerrainGround)	
+			TAF = random.choice(TerrainAttribute)
+			if water == True:
+				TWF = random.choice(TerrainWater)
+				print (TGF,TAF,TWF)
+			else:
+				print (TGF,TAF)
 	elif command == "back":
 		x = x - 1
 		print ("your coordinates are: x = ",x,", y = ",y)
+		newTerrain = True
+		water = False
+		TerrainWater = ["Creek","River","Lake","Stream","Waterfall"]
+		TerrainGround = ["Dirt","Grass","Rocks","Podzol"]
+		TerrainAttribute = ["Trees","Cliffs"]
+		
+		
+		if newTerrain == True:
+			water = random.choice([True, False])
+			TGF = random.choice(TerrainGround)	
+			TAF = random.choice(TerrainAttribute)
+			if water == True:
+				TWF = random.choice(TerrainWater)
+				print (TGF,TAF,TWF)
+			else:
+				print (TGF,TAF)
 	elif command == "left":
 		y = y + 1
 		print ("your coordinates are: x = ",x,", y = ",y)
+		newTerrain = True
+		water = False
+		TerrainWater = ["Creek","River","Lake","Stream","Waterfall"]
+		TerrainGround = ["Dirt","Grass","Rocks","Podzol"]
+		TerrainAttribute = ["Trees","Cliffs"]
+		
+		
+		if newTerrain == True:
+			water = random.choice([True, False])
+			TGF = random.choice(TerrainGround)	
+			TAF = random.choice(TerrainAttribute)
+			if water == True:
+				TWF = random.choice(TerrainWater)
+				print (TGF,TAF,TWF)
+			else:
+				print (TGF,TAF)
 	elif command == "right":
 		y = y - 1
 		print ("your coordinates are: x = ",x,", y = ",y)
+		newTerrain = True
+		water = False
+		TerrainWater = ["Creek","River","Lake","Stream","Waterfall"]
+		TerrainGround = ["Dirt","Grass","Rocks","Podzol"]
+		TerrainAttribute = ["Trees","Cliffs"]
+		
+		
+		if newTerrain == True:
+			water = random.choice([True, False])
+			TGF = random.choice(TerrainGround)	
+			TAF = random.choice(TerrainAttribute)
+			if water == True:
+				TWF = random.choice(TerrainWater)
+				print (TGF,TAF,TWF)
+			else:
+				print (TGF,TAF)
 	elif command == "waypoint":
 		print("action:")
 		action = input()
@@ -89,3 +153,8 @@ while not loop:
 			print("add")
 			print("delete")
 			print("list")
+	
+		
+		
+		
+	
