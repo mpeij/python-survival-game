@@ -1,6 +1,13 @@
 import random
+waypointsN = []
+waypointsX = []
+waypointsY = []
+
 x = 0
 y = 0
+command = 0
+wps = 0
+name = 0
 class chunk():
 	def _init_(self):
 		self.x = ""
@@ -15,18 +22,70 @@ while not loop:
 		print ("back")
 		print ("left")
 		print ("right")
-		print ("collect")
-		print ("build")
+		print ("waypoint")
 		print ("help")
 	elif command == "forward":
 		x = x + 1
-		print ("your coordinates are: x = ",x,", z = ",y)
+		print ("your coordinates are: x = ",x,", y = ",y)
 	elif command == "back":
 		x = x - 1
-		print ("your coordinates are: x = ",x,", z = ",y)
+		print ("your coordinates are: x = ",x,", y = ",y)
 	elif command == "left":
 		y = y + 1
-		print ("your coordinates are: x = ",x,", z = ",y)
+		print ("your coordinates are: x = ",x,", y = ",y)
 	elif command == "right":
 		y = y - 1
-		print ("your coordinates are: x = ",x,", z = ",y)
+		print ("your coordinates are: x = ",x,", y = ",y)
+	elif command == "waypoint":
+		print("action:")
+		action = input()
+		if action == "add":
+			if wps < 5:
+				print("name:")
+				action = input()
+				waypointsN.append(action)
+				waypointsX.append(x)
+				waypointsY.append(y)
+				wps = wps + 1
+				print("waypoint",action,"has been added")
+			elif wps >= 5:
+				print("Too many waypoints")
+		elif action == "list":
+			print("name: ",waypointsN)
+			print("x: ",waypointsX)
+			print("y: ",waypointsY)
+		elif action == "delete":
+			print("waypoint name:")
+			name = input()
+			if waypointsN[0] == name:
+				del waypointsN[0]
+				del waypointsX[0]
+				del waypointsY[0]
+				print("waypoint",name,"has been deleted")
+			elif waypointsN[1] == name:
+				del waypointsN[1]
+				del waypointsX[1]
+				del waypointsY[1]
+				print("waypoint",name,"has been deleted")
+			elif waypointsN[2] == name:
+				del waypointsN[2]
+				del waypointsX[2]
+				del waypointsY[2]
+				print("waypoint",name,"has been deleted")
+			elif waypointsN[3] == name:
+				del waypointsN[3]
+				del waypointsX[3]
+				del waypointsY[3]
+				print("waypoint",name,"has been deleted")
+			elif waypointsN[4] == name:
+				del waypointsN[4]
+				del waypointsX[4]
+				del waypointsY[4]
+				print("waypoint",name,"has been deleted")
+			else:
+				print("no waypoint",name,"found")
+		elif action == "help":
+			print("help")
+			print("add")
+			print("delete")
+			print("list")
