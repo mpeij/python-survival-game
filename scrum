@@ -4,10 +4,10 @@ build option
 use option
 items and inventory
 health en food
-biome on coordinates saving
+
 busy:
 
-Biome integration - maurits
+biome on coordinates saving - maurits
 
 
 
@@ -16,3 +16,4 @@ startup file-leon
 movement-maurits
 biome generator - leon
 waypoint option - maurits
+Biome integration - maurits
