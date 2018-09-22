@@ -1,4 +1,4 @@
-import (mainfile) as intro
+import (main_file) as intro
 
 def main():
     print ("  _____         _    ____            __ _   ")
