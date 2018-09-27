@@ -15,6 +15,26 @@ class chunk():
 		self.y = ""
 		self.biome = ""
 
+def NewTerrain():
+	newTerrain = True
+	water = False
+	TerrainWater = ["creek","river","lake","stream","waterfall"]
+	TerrainGround = ["grassy","rocky","sandy"]
+	TerrainAttribute = ["trees","cliffs"]
+	TerrainLevel = ["mountains","lowlands","highlands"]
+	
+	if newTerrain == True:
+		water = random.choice([True, False])
+		TGF = random.choice(TerrainGround)
+		TAF = random.choice(TerrainAttribute)
+		TLF = random.choice(TerrainLevel)
+		if water == True:
+			TWF = random.choice(TerrainWater)
+			print ("There are", TGF, TLF, "with", TAF, "and a", TWF)
+		else:
+			print ("There are", TGF, TLF, "with", TAF)
+
+
 loop = False
 while not loop:
 	command = input()
@@ -28,23 +48,19 @@ while not loop:
 	elif command == "forward":
 		x = x + 1
 		print ("your coordinates are: x = ",x,", y = ",y)
-		newTerrain = True
-		newTerrain = False
+		NewTerrain()
 	elif command == "back":
 		x = x - 1
 		print ("your coordinates are: x = ",x,", y = ",y)
-		newTerrain = True
-		newTerrain = False
+		NewTerrain()
 	elif command == "left":
 		y = y + 1
 		print ("your coordinates are: x = ",x,", y = ",y)
-		newTerrain = True
-		newTerrain = False
+		NewTerrain()
 	elif command == "right":
 		y = y - 1
 		print ("your coordinates are: x = ",x,", y = ",y)
-		newTerrain = True
-		newTerrain = False
+		NewTerrain()
 	elif command == "waypoint":
 		print("action:")
 		action = input()
