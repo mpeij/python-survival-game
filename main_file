@@ -29,18 +29,22 @@ while not loop:
 		x = x + 1
 		print ("your coordinates are: x = ",x,", y = ",y)
 		newTerrain = True
+		newTerrain = False
 	elif command == "back":
 		x = x - 1
 		print ("your coordinates are: x = ",x,", y = ",y)
 		newTerrain = True
+		newTerrain = False
 	elif command == "left":
 		y = y + 1
 		print ("your coordinates are: x = ",x,", y = ",y)
 		newTerrain = True
+		newTerrain = False
 	elif command == "right":
 		y = y - 1
 		print ("your coordinates are: x = ",x,", y = ",y)
 		newTerrain = True
+		newTerrain = False
 	elif command == "waypoint":
 		print("action:")
 		action = input()
@@ -94,8 +98,3 @@ while not loop:
 			print("add")
 			print("delete")
 			print("list")
-	
-		
-		
-		
-	
