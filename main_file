@@ -3,6 +3,7 @@ import BiomeGen
 waypointsN = []
 waypointsX = []
 waypointsY = []
+biome = [x[],y[],biomeX[biomeY["biomedata"]]]
 
 x = 0
 y = 0
