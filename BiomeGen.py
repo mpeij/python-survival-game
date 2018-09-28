@@ -17,3 +17,6 @@ if newTerrain == True:
 		print ("There are", TGF, TLF, "with", TAF, "and a", TWF)
 	else:
 		print ("There are", TGF, TLF, "with", TAF)
+        data = []
+        Biomes = [biome[0], biome[1]]
+        biome = [x, y, data]
