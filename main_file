@@ -3,8 +3,11 @@ import BiomeGen
 waypointsN = []
 waypointsX = []
 waypointsY = []
-biome = biomeX0[biomeY0["biomedata"],biomeY1["biomedata"],biomeX1[biomeY0["biomedata"],biomeY1["biomedata"]]]]
-
+xS = 0
+yS = 0
+data = []
+biome = [xS, yS, data]
+Biomes = []
 x = 0
 y = 0
 command = 0
@@ -32,8 +35,27 @@ def NewTerrain():
 		if water == True:
 			TWF = random.choice(TerrainWater)
 			print ("There are", TGF, TLF, "with", TAF, "and a", TWF)
+			xS = x
+			yS = y
+			TGFS = TGF
+			TLFS = TLF
+			TAFS = TLF
+			TWFS = TWF
+			data.extend([TGF,TLF,TAF,TWF])
+			Biomes.extend(biome)
+			data.clear()
+			print(Biomes)
 		else:
 			print ("There are", TGF, TLF, "with", TAF)
+			xS = x
+			yS = y
+			TGFS = TGF
+			TLFS = TLF
+			TAFS = TLF
+			data.extend([TGF,TLF,TAF])
+			Biomes.extend(biome)
+			data.clear()
+			print(Biomes)
 
 
 loop = False
