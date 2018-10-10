@@ -19,46 +19,42 @@ class chunk():
 		self.biome = ""
 
 def NewTerrain():
-	newTerrain = True
 	water = False
 	TerrainWater = ["creek","river","lake","stream","waterfall"]
 	TerrainGround = ["grassy","rocky","sandy"]
 	TerrainAttribute = ["trees","cliffs"]
 	TerrainLevel = ["mountains","lowlands","highlands"]
 	
-	if newTerrain == True:
-		water = random.choice([True, False])
-		TGF = random.choice(TerrainGround)
-		TAF = random.choice(TerrainAttribute)
-		TLF = random.choice(TerrainLevel)
-		if water == True:
-			TWF = random.choice(TerrainWater)
-			print ("There are", TGF, TLF, "with", TAF, "and a", TWF)
-			xS = x
-			yS = y
-			TGFS = TGF
-			TLFS = TLF
-			TAFS = TLF
-			TWFS = TWF
-			data.extend([TGF,TLF,TAF,TWF])
-			Biomes.extend(biome)
-			data.clear()
-			print(Biomes)
-		else:
-			print ("There are", TGF, TLF, "with", TAF)
-			xS = x
-			yS = y
-			TGFS = TGF
-			TLFS = TLF
-			TAFS = TLF
-			data.extend([TGF,TLF,TAF])
-			Biomes.extend(biome)
-			data.clear()
-			print(Biomes)
+	water = random.choice([True, False])
+	TGF = random.choice(TerrainGround)
+	TAF = random.choice(TerrainAttribute)
+	TLF = random.choice(TerrainLevel)
+	if water == True:
+		TWF = random.choice(TerrainWater)
+		print ("There are", TGF, TLF, "with", TAF, "and a", TWF)
+		# xS = x #copy.copy(x)
+		# yS = y
+		# TGFS = TGF
+		# TLFS = TLF
+		# TAFS = TLF
+		# TWFS = TWF
+		data.extend([[x,y],[TGF,TLF,TAF,TWF]])
+		# Biomes.append(biome)
+		# print(Biomes)
+	else:
+		print ("There are", TGF, TLF, "with", TAF)
+		# xS = x
+		# yS = y
+		# TGFS = TGF
+		# TLFS = TLF
+		# TAFS = TLF 
+		data.extend([[x,y],[TGF,TLF,TAF]])
+		# Biomes.extend(biome)
+		# print(Biomes)
 
 
-loop = False
-while not loop:
+loop = True
+while loop:
 	command = input()
 	if command == "help":
 		print ("forward")
