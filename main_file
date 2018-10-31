@@ -1,134 +1,120 @@
+"""
+Text adventure
+"""
 import random
-waypointsN = []
-waypointsX = []
-waypointsY = []
-xS = 0
-yS = 0
-data = []
-biome = [xS, yS, data]
-Biomes = []
-x = 0
-y = 0
-command = 0
-wps = 0
-name = 0
-class chunk():
-	def _init_(self):
-		self.x = ""
-		self.y = ""
-		self.biome = ""
 
-def NewTerrain():
-	water = False
-	TerrainWater = ["creek","river","lake","stream","waterfall"]
-	TerrainGround = ["grassy","rocky","sandy"]
-	TerrainAttribute = ["trees","cliffs"]
-	TerrainLevel = ["mountains","lowlands","highlands"]
-	
-	water = random.choice([True, False])
-	TGF = random.choice(TerrainGround)
-	TAF = random.choice(TerrainAttribute)
-	TLF = random.choice(TerrainLevel)
-	if water == True:
-		TWF = random.choice(TerrainWater)
-		print ("There are", TGF, TLF, "with", TAF, "and a", TWF)
-		# xS = x #copy.copy(x)
-		# yS = y
-		# TGFS = TGF
-		# TLFS = TLF
-		# TAFS = TLF
-		# TWFS = TWF
-		data.extend([[x,y],[TGF,TLF,TAF,TWF]])
-		# Biomes.append(biome)
-		# print(Biomes)
+WATER_TYPES = ["creek","river","lake","stream","waterfall"]
+GROUND_TYPES = ["grassy","rocky","sandy"]
+ATTRIBUTE_TYPES = ["trees","cliffs"]
+LEVEL_TYPES = ["mountains","lowlands","highlands"]
+
+def newTerrain(self, x, y):
+        self.x = x
+        self.y = y
+
+        water_chance = random.randint(1, 10)
+        self.water = random.choice(GROUND_TYPES)
+        self.ground = random.choice(ATTRIBUTE_TYPES)
+        self.attribute = random.choice(LEVEL_TYPES)
+        if water_chance >= 4:
+            self.water = random.choice(WATER_TYPES)
+
+class world():
+    """ Object class. """
+
+    def __init__(self):
+        self.x = None
+        self.y = None
+        self.water = None
+        self.ground = None
+        self.attribute = None
+        self.level = None
+
+    def setup(self, x, y):
+        self.x = x
+        self.y = y
+
+        water_chance = random.randint(1, 10)
+        self.water = random.choice(GROUND_TYPES)
+        self.ground = random.choice(ATTRIBUTE_TYPES)
+        self.attribute = random.choice(LEVEL_TYPES)
+        if water_chance >= 4:
+            self.water = random.choice(WATER_TYPES)
+
+class Player():
+    """ Player class. """
+
+    def __init__(self):
+        self.x = None
+        self.y = None
+
+    def setup(self):
+        self.x = 0
+        self.y = 0
+
+class World():
+    """ Main application class. """
+
+    def __init__(self):
+        pass
+
+    def setup(self):
+        self.player = Player()
+        self.player.setup()
+        self.objects = []
+        # TODO: fill world with objects
+
+    def on_draw(self): 
+        """ Render the screen. """
+
+        # teken speler
+        print("Player is: ", self.player.x, self.player.y)
+
+        # teken objecten
+        for object in self.objects:
+            # teken object
+            print("object op: ", object.x, object.y)
+            print("De ground is: ", object.ground)
+
+def knownTerrain(self)
+	if self.player.x == self.world.x:
+		if self.player.y == self.world.y:
+			return True
+		else:
+			return False
 	else:
-		print ("There are", TGF, TLF, "with", TAF)
-		# xS = x
-		# yS = y
-		# TGFS = TGF
-		# TLFS = TLF
-		# TAFS = TLF 
-		data.extend([[x,y],[TGF,TLF,TAF]])
-		# Biomes.extend(biome)
-		# print(Biomes)
+		return False
+    def on_update(self):
+        # TODO: alle geldigde instructies in een lijst zetten
+        # TODO: user input checken (geen cijfers etc.)
+        # TODO: user input naar lower case?
+        command = input("What to do?")
+        if command == "forward":
+            self.player.y += 1
+			if not knownTerrain:
+				newTerrain()
+		elif command == "back":
+			self.player.y -= 1
+		elif command == "left":
+			self.player.x += 1
+		elif command == "right":
+			self.player.x -= 1
+        # TODO: other instructions
 
 
-loop = True
-while loop:
-	command = input()
-	if command == "help":
-		print ("forward")
-		print ("back")
-		print ("left")
-		print ("right")
-		print ("waypoint")
-		print ("help")
-	elif command == "forward":
-		x = x + 1
-		print ("your coordinates are: x = ",x,", y = ",y)
-		NewTerrain()
-	elif command == "back":
-		x = x - 1
-		print ("your coordinates are: x = ",x,", y = ",y)
-		NewTerrain()
-	elif command == "left":
-		y = y + 1
-		print ("your coordinates are: x = ",x,", y = ",y)
-		NewTerrain()
-	elif command == "right":
-		y = y - 1
-		print ("your coordinates are: x = ",x,", y = ",y)
-		NewTerrain()
-	elif command == "waypoint":
-		print("action:")
-		action = input()
-		if action == "add":
-			if wps < 5:
-				print("name:")
-				action = input()
-				waypointsN.append(action)
-				waypointsX.append(x)
-				waypointsY.append(y)
-				wps = wps + 1
-				print("waypoint",action,"has been added")
-			elif wps >= 5:
-				print("Too many waypoints")
-		elif action == "list":
-			print("name: ",waypointsN)
-			print("x: ",waypointsX)
-			print("y: ",waypointsY)
-		elif action == "delete":
-			print("waypoint name:")
-			name = input()
-			if waypointsN[0] == name:
-				del waypointsN[0]
-				del waypointsX[0]
-				del waypointsY[0]
-				print("waypoint",name,"has been deleted")
-			elif waypointsN[1] == name:
-				del waypointsN[1]
-				del waypointsX[1]
-				del waypointsY[1]
-				print("waypoint",name,"has been deleted")
-			elif waypointsN[2] == name:
-				del waypointsN[2]
-				del waypointsX[2]
-				del waypointsY[2]
-				print("waypoint",name,"has been deleted")
-			elif waypointsN[3] == name:
-				del waypointsN[3]
-				del waypointsX[3]
-				del waypointsY[3]
-				print("waypoint",name,"has been deleted")
-			elif waypointsN[4] == name:
-				del waypointsN[4]
-				del waypointsX[4]
-				del waypointsY[4]
-				print("waypoint",name,"has been deleted")
-			else:
-				print("no waypoint",name,"found")
-		elif action == "help":
-			print("help")
-			print("add")
-			print("delete")
-			print("list")
+        # TODO: check if terrain is undiscovered
+            # if so, generate
+        new_object = Object()
+        new_object.setup(self.player.x, self.player.y)
+        self.objects.append(new_object)
+
+def main():
+    world = World()
+    world.setup()
+    while True:
+        world.on_update()
+        world.on_draw()
+
+
+if __name__ == "__main__":
+    main()
