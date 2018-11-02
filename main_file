@@ -19,6 +19,15 @@ def newTerrain(self, x, y):
         if water_chance >= 4:
             self.water = random.choice(WATER_TYPES)
 
+def knownTerrain(self):
+	if self.player.x == self.world.x:
+		if self.player.y == self.world.y:
+			return True
+		else:
+			return False
+	else:
+		return False
+
 class world():
     """ Object class. """
 
@@ -76,29 +85,21 @@ class World():
             print("object op: ", object.x, object.y)
             print("De ground is: ", object.ground)
 
-def knownTerrain(self)
-	if self.player.x == self.world.x:
-		if self.player.y == self.world.y:
-			return True
-		else:
-			return False
-	else:
-		return False
     def on_update(self):
         # TODO: alle geldigde instructies in een lijst zetten
         # TODO: user input checken (geen cijfers etc.)
         # TODO: user input naar lower case?
-        command = input("What to do?")
+        command = input("> ")
         if command == "forward":
             self.player.y += 1
-			if not knownTerrain:
-				newTerrain()
-		elif command == "back":
-			self.player.y -= 1
-		elif command == "left":
-			self.player.x += 1
-		elif command == "right":
-			self.player.x -= 1
+            if not knownTerrain:
+                newTerrain()
+        elif command == "back":
+            self.player.y -= 1
+        elif command == "left":
+            self.player.x += 1
+        elif command == "right":
+            self.player.x -= 1
         # TODO: other instructions
 
 
