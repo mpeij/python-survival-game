@@ -67,7 +67,7 @@ class World():
     def __init__(self):
         pass
 
-    def setup(self):
+    def setup(self, objects):
         self.player = Player()
         self.player.setup()
         self.objects = []
