@@ -95,9 +95,6 @@ class World():
 			print("found", object[0], object[1], object[2],object[3],object[4])
 		elif v == "false":
 			print("false")
-			print(object[5])
-			print(object[0])
-			print(object[1])
 			self.newTerrain()
 		
 	def setup(self):
