@@ -2,6 +2,7 @@
 Text adventure
 """
 import random
+import json
 
 WATER_TYPES = ["creek","river","lake","stream","waterfall"]
 GROUND_TYPES = ["grassy","rocky","sandy"]
@@ -10,28 +11,31 @@ LEVEL_TYPES = ["mountains","lowlands","highlands"]
 v = "false"
 objects = []
 
-class Terrain_Object():
-    """ Object class. """
+def startup():
+	command = ""
+	print ("  _____         _    ____            __ _   ")
+	print (" |_   _|____  _| |_ / ___|_ __ __ _ / _| |_ ")
+	print ("   | |/ _ \ \\/ / __| |   | '__/ _` | |_| __|")
+	print ("   | |  __/>  <| |_| |___| | | (_| |  _| |_ ") 
+	print ("   |_|\\___/_/\\_\\\__|\\____|_|  \\__,_|_|  \\__|")  
+	print ("")
+	print("Welcome to the menu. Type help for options")
+	while True:
+		command = input("> ")
+		if command == "help":
+			print("help")
+			print("load")
+			print("new")
+		elif command == "load":
+			with open("saveNames.json", "r") as file_in:
+				name_list = json.load(file_in)
+				break
+			print(name_list)
+		elif command == "new":
+			print("Starting new game...")
+			break
 
-    def __init__(self):
-        self.x = None
-        self.y = None
-        self.water = None
-        self.ground = None
-        self.attribute = None
-        self.level = None
-
-    def setup(self, x, y):
-        self.x = x
-        self.y = y
-
-        water_chance = random.randint(1, 100)
-        self.water = random.choice(GROUND_TYPES)
-        self.ground = random.choice(ATTRIBUTE_TYPES)
-        self.attribute = random.choice(LEVEL_TYPES)
-        if water_chance >= 40:
-            self.water = random.choice(WATER_TYPES)
-
+			
 class Player():
     """ Player class. """
 
@@ -100,7 +104,8 @@ class World():
 	def setup(self):
 		self.player = Player()
 		self.player.setup(0, 0)
-		self.newTerrain()
+		if objects == []:
+			self.newTerrain()
 		self.on_draw()
 	
 	def on_draw(self):
@@ -137,24 +142,43 @@ class World():
 			print("left")
 			print("right")
 			print("help")
+		elif command == "save":
+			print("save name:")
+			save_name = input("> ")
+			
+			with open("saveNames.json", "r") as file_in:
+				temp_saveVar = json.load(file_in)
+			temp_saveList = []
+			if temp_saveVar != "":
+				for object in temp_saveVar:
+					temp_saveList.append(object)
+				
+				if object == save_name:
+					print("save already exists")
+				else:
+					temp_saveList.append(save_name)
+					print(temp_saveList)
+
+					with open('saveNames.json', 'w') as file_out:
+						json.dump(temp_saveList, file_out)
+			else:
+				temp_saveList.append(save_name)
+				print(temp_saveList)
+
+				with open('saveNames.json', 'w') as file_out:
+						json.dump(temp_saveList, file_out)
+						
+		
 		else:
-			print("not a valid input")
-        # TODO: other instructions
-
-
-        # TODO: check if terrain is undiscovered
-            # if so, generate
-        # new_object = Object()
-        #new_object.setup(self.player.x, self.player.y)
-        #self.objects.append(new_object)
+			print("invalid input")
 
 def main():
 	world = World()
+	startup()
 	world.setup()
 	while True:
 		world.on_update()
 		world.on_draw()
-
 
 if __name__ == "__main__":
 	main()
