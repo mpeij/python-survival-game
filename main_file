@@ -7,7 +7,8 @@ WATER_TYPES = ["creek","river","lake","stream","waterfall"]
 GROUND_TYPES = ["grassy","rocky","sandy"]
 ATTRIBUTE_TYPES = ["trees","cliffs"]
 LEVEL_TYPES = ["mountains","lowlands","highlands"]
-v = None
+v = "false"
+objects = []
 
 class Terrain_Object():
     """ Object class. """
@@ -42,37 +43,68 @@ class Player():
         self.x = x
         self.y = y
     """ Main application class. """
-
+	
 class World():
 	
 	def __init__(self):
 		self.player = None
-		self.objects = []
         # TODO: fill world with objects
 	
 	def newTerrain(self):
-		water_chance = random.randint(1, 100)
+		temp_list = []
 		self.ground = random.choice(GROUND_TYPES)
 		self.attribute = random.choice(ATTRIBUTE_TYPES)
 		self.level = random.choice(LEVEL_TYPES)
-		if water_chance >= 40:
+		water_chance = random.randint(1, 100)
+		if water_chance <= 40:
 			self.water = random.choice(WATER_TYPES)
-			temp_xy = (self.player.x, self.player.y)
-			self.objects.append(temp_xy, self.ground, self.attribute, self.level, self.water)
+			temp_x = self.player.x
+			temp_y = self.player.y
+			temp_list.append(temp_x)
+			temp_list.append(temp_y)
+			temp_list.append(self.ground)
+			temp_list.append(self.attribute)
+			temp_list.append(self.level)
+			temp_list.append(self.water)
+			objects.append(temp_list)
 		else:
-			temp_xy = (self.player.x, self.player.y)
-			self.objects.append(temp_xy, self.ground, self.attribute, self.level)
+			self.water = "none"
+			temp_x = self.player.x
+			temp_y = self.player.y
+			temp_list.append(temp_x)
+			temp_list.append(temp_y)
+			temp_list.append(self.ground)
+			temp_list.append(self.attribute)
+			temp_list.append(self.level)
+			temp_list.append(self.water)
+			objects.append(temp_list)
 			
 	def knownTerrain(self):
-		for object in self.objects:
-			if self.player.x == self.objects.x and self.player.y == self.objects.y:
-				v = True
+		for object in objects:
+			if self.player.x == object[0] and self.player.y == object[1]:
+				v = "true"
+				break
 			else:
-				v = False
+				v = "false"
+			
+		if object[5] != "none" and v == "true":
+			print("true")
+			print("found", object[0], object[1], object[2],object[3],object[4],object[5])
+		elif v == "true":
+			print("true")
+			print("found", object[0], object[1], object[2],object[3],object[4])
+		elif v == "false":
+			print("false")
+			print(object[5])
+			print(object[0])
+			print(object[1])
+			self.newTerrain()
 		
 	def setup(self):
 		self.player = Player()
 		self.player.setup(0, 0)
+		self.newTerrain()
+		self.on_draw()
 	
 	def on_draw(self):
         #Render the screen.
@@ -82,9 +114,8 @@ class World():
 		print("Player is: ", self.player.x, self.player.y)
 
         # teken objecten
-		for object in self.objects:
             # teken object
-			print("De ground is: ", self.objects)
+		print("De ground is: ", objects)
 
 	def on_update(self):
         # TODO: alle geldigde instructies in een lijst zetten
@@ -94,14 +125,15 @@ class World():
 		if command == "forward":
 			self.player.y += 1
 			self.knownTerrain()
-			if not v:
-				self.newTerrain()
 		elif command == "back":
 			self.player.y -= 1
+			self.knownTerrain()
 		elif command == "left":
 			self.player.x += 1
+			self.knownTerrain()
 		elif command == "right":
 			self.player.x -= 1
+			self.knownTerrain()
 		elif command == "help":
 			print("forward")
 			print("back")
