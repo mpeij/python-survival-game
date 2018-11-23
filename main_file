@@ -3,6 +3,7 @@ Text adventure
 """
 import random
 import json
+import os
 
 WATER_TYPES = ["creek","river","lake","stream","waterfall"]
 GROUND_TYPES = ["grassy","rocky","sandy"]
@@ -10,6 +11,58 @@ ATTRIBUTE_TYPES = ["trees","cliffs"]
 LEVEL_TYPES = ["mountains","lowlands","highlands"]
 v = "false"
 objects = []
+
+def save():
+	print("save name:")
+	save_name = input("> ")
+		
+	with open("saves/saveNames.json", "r") as file_in:
+		temp_saveVar = json.load(file_in)
+	temp_saveList = []
+	if temp_saveVar != "":
+		for object in temp_saveVar:
+			temp_saveList.append(object)
+		
+		if object == save_name:
+			print("save already exists")
+		else:
+			temp_saveList.append(save_name)
+			print(temp_saveList)
+			
+			with open('saves/saveNames.json', 'w') as file_out:
+				json.dump(temp_saveList, file_out)
+			
+			temp_saveLocation = "saves/" + save_name
+			
+			os.mkdir(temp_saveLocation)
+			temp_saveFile = temp_saveLocation + "/world.json"
+
+			with open(temp_saveFile, 'w+') as output:
+				json.dump(objects, output)
+	else:
+		temp_saveList.append(save_name)
+		print(temp_saveList)
+
+		with open('saves/saveNames.json', 'w') as file_out:
+			json.dump(temp_saveList, file_out)
+
+		temp_saveLocation = "saves/" + save_name
+
+		os.mkdir(temp_saveLocation)
+		temp_saveFile = temp_saveLocation + "/world.json"
+
+		with open(temp_saveFile, 'w+') as output:
+			json.dump(objects, output)
+
+def load():
+	print("save name:")
+	loadFile = input("> ")
+			
+	with open("saves/" + loadFile + "/world.json") as file_in:
+		temp_objectsVar = json.load(file_in)
+		for object in temp_objectsVar:
+			objects.append(object)
+	
 
 def startup():
 	command = ""
@@ -27,10 +80,9 @@ def startup():
 			print("load")
 			print("new")
 		elif command == "load":
-			with open("saveNames.json", "r") as file_in:
-				name_list = json.load(file_in)
-				break
-			print(name_list)
+			load()
+			break
+			
 		elif command == "new":
 			print("Starting new game...")
 			break
@@ -86,38 +138,37 @@ class World():
 	def knownTerrain(self):
 		for object in objects:
 			if self.player.x == object[0] and self.player.y == object[1]:
-				v = "true"
+				if object[5] != "none":
+					print("there is:", object[2],object[3],object[4],object[5])
+				else:
+					print("there is:", object[2],object[3],object[4])
 				break
 			else:
-				v = "false"
-			
-		if object[5] != "none" and v == "true":
-			print("true")
-			print("found", object[0], object[1], object[2],object[3],object[4],object[5])
-		elif v == "true":
-			print("true")
-			print("found", object[0], object[1], object[2],object[3],object[4])
-		elif v == "false":
-			print("false")
-			self.newTerrain()
+				if object[5] != "none":
+					print("there is:", object[2],object[3],object[4],object[5])
+				else:
+					print("there is:", object[2],object[3],object[4])
 		
 	def setup(self):
 		self.player = Player()
 		self.player.setup(0, 0)
 		if objects == []:
 			self.newTerrain()
-		self.on_draw()
 	
 	def on_draw(self):
         #Render the screen.
 
         # teken speler
-		print("")
+		print()
 		print("Player is: ", self.player.x, self.player.y)
 
         # teken objecten
             # teken object
-		print("De ground is: ", objects)
+		for object in objects:
+			if object[5] != "none":
+				print("found", object[0], object[1], object[2],object[3],object[4],object[5])
+			else:
+				print("found", object[0], object[1], object[2],object[3],object[4])
 
 	def on_update(self):
         # TODO: alle geldigde instructies in een lijst zetten
@@ -143,32 +194,8 @@ class World():
 			print("right")
 			print("help")
 		elif command == "save":
-			print("save name:")
-			save_name = input("> ")
-			
-			with open("saveNames.json", "r") as file_in:
-				temp_saveVar = json.load(file_in)
-			temp_saveList = []
-			if temp_saveVar != "":
-				for object in temp_saveVar:
-					temp_saveList.append(object)
-				
-				if object == save_name:
-					print("save already exists")
-				else:
-					temp_saveList.append(save_name)
-					print(temp_saveList)
+			save()
 
-					with open('saveNames.json', 'w') as file_out:
-						json.dump(temp_saveList, file_out)
-			else:
-				temp_saveList.append(save_name)
-				print(temp_saveList)
-
-				with open('saveNames.json', 'w') as file_out:
-						json.dump(temp_saveList, file_out)
-						
-		
 		else:
 			print("invalid input")
 
@@ -177,8 +204,8 @@ def main():
 	startup()
 	world.setup()
 	while True:
-		world.on_update()
 		world.on_draw()
+		world.on_update()
 
 if __name__ == "__main__":
 	main()
