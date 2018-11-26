@@ -26,10 +26,10 @@ def load():
 		for object in temp_objectsVar:
 			objects.append(object)
 	
-	with open("saves/" + loadFile + "/playerX") as file_in:
+	with open("saves/" + loadFile + "/player/playerX.json") as file_in:
 		importX = json.load(file_in)
 		
-	with open("saves/" + loadFile + "/playerY") as file_in:
+	with open("saves/" + loadFile + "/player/playerY.json") as file_in:
 		importY = json.load(file_in)
 	loaded = "true"
 	
@@ -102,12 +102,14 @@ class World():
 				with open(temp_saveFile, 'w+') as output:
 					json.dump(objects, output)
 				
-				temp_saveFile = temp_saveLocation + "/playerX.json"
+				os.mkdir("saves/" + save_name + "/player")
+				
+				temp_saveFile = temp_saveLocation + "/player/playerX.json"
 				
 				with open(temp_saveFile, "w+") as output:
 					json.dump(self.player.x, output)
 				
-				temp_saveFile = temp_saveLocation + "/playerY.json"
+				temp_saveFile = temp_saveLocation + "/player/playerY.json"
 				
 				with open(temp_saveFile, "w+") as output:
 					json.dump(self.player.y, output)
@@ -127,12 +129,14 @@ class World():
 			with open(temp_saveFile, 'w+') as output:
 				json.dump(objects, output)
 					
-			temp_saveFile = temp_saveLocation + "/playerX.json"
+			os.mkdir("saves/" + save_name + "/player")
+					
+			temp_saveFile = temp_saveLocation + "/player/playerX.json"
 			
 			with open(temp_saveFile, "w+") as output:
 				json.dump(self.player.x, output)
 				
-			temp_saveFile = temp_saveLocation + "/playerY.json"
+			temp_saveFile = temp_saveLocation + "/player/playerY.json"
 				
 			with open(temp_saveFile, "w+") as output:
 				json.dump(self.player.y, output)
