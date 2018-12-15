@@ -1,4 +1,19 @@
-def load(self):
+"""
+Text adventure
+"""
+import random
+import json
+import os
+
+WATER_TYPES = ["creek","river","lake","stream","waterfall"]
+GROUND_TYPES = ["grassy","rocky","sandy"]
+ATTRIBUTE_TYPES = ["trees","cliffs"]
+LEVEL_TYPES = ["mountains","lowlands","highlands"]
+v = "false"
+objects = []
+
+class loadGame():
+	def content(self):
 		print("save name:")
 		loadFile = input("> ")
 	
@@ -13,4 +28,238 @@ def load(self):
 		with open("saves/" + loadFile + "/player/playerY.json") as file_in:
 			self.importY = json.load(file_in)
 			
-		loaded = "true"
+		self.loaded = "true"
+			
+class Player():
+    """ Player class. """
+
+    def __init__(self):
+        self.x = None
+        self.y = None
+
+    def setup(self, x, y):
+        self.x = x
+        self.y = y
+    """ Main application class. """
+	
+class World():
+	
+	def startup(self):
+		command = ""
+		print ("  _____         _    ____            __ _   ")
+		print (" |_   _|____  _| |_ / ___|_ __ __ _ / _| |_ ")
+		print ("   | |/ _ \ \\/ / __| |   | '__/ _` | |_| __|")
+		print ("   | |  __/>  <| |_| |___| | | (_| |  _| |_ ") 
+		print ("   |_|\\___/_/\\_\\\__|\\____|_|  \\__,_|_|  \\__|")  
+		print ("")
+		print("Welcome to the menu. Type help for options")
+		while True:
+			command = input("> ")
+			if command == "help":
+				print("help")
+				print("load")
+				print("new")
+			elif command == "load":
+				self.load = loadGame()
+				self.load.content()
+				break
+			
+			elif command == "new":
+				print("Starting new game...")
+				print()
+				self.load.loaded = "false"
+				break
+	
+	def save(self):
+		print("save name:")
+		save_name = input("> ")
+		
+		with open("saves/saveNames.json", "r") as file_in:
+			temp_saveVar = json.load(file_in)
+		temp_saveList = []
+		if temp_saveVar != "":
+			for object in temp_saveVar:
+				temp_saveList.append(object)
+		
+			if object == save_name:
+				print("save already exists")
+			else:
+				temp_saveList.append(save_name)
+				print(temp_saveList)
+			
+				with open('saves/saveNames.json', 'w') as file_out:
+					json.dump(temp_saveList, file_out)
+			
+				temp_saveLocation = "saves/" + save_name
+			
+				os.mkdir(temp_saveLocation)
+				temp_saveFile = temp_saveLocation + "/world.json"
+
+				with open(temp_saveFile, 'w+') as output:
+					json.dump(objects, output)
+				
+				os.mkdir("saves/" + save_name + "/player")
+				
+				temp_saveFile = temp_saveLocation + "/player/playerX.json"
+				
+				with open(temp_saveFile, "w+") as output:
+					json.dump(self.player.x, output)
+				
+				temp_saveFile = temp_saveLocation + "/player/playerY.json"
+				
+				with open(temp_saveFile, "w+") as output:
+					json.dump(self.player.y, output)
+					
+		else:
+			temp_saveList.append(save_name)
+			print(temp_saveList)
+			
+			with open('saves/saveNames.json', 'w') as file_out:
+				json.dump(temp_saveList, file_out)
+			
+			temp_saveLocation = "saves/" + save_name
+		
+			os.mkdir(temp_saveLocation)
+			temp_saveFile = temp_saveLocation + "/world.json"
+
+			with open(temp_saveFile, 'w+') as output:
+				json.dump(objects, output)
+					
+			os.mkdir("saves/" + save_name + "/player")
+					
+			temp_saveFile = temp_saveLocation + "/player/playerX.json"
+			
+			with open(temp_saveFile, "w+") as output:
+				json.dump(self.player.x, output)
+				
+			temp_saveFile = temp_saveLocation + "/player/playerY.json"
+				
+			with open(temp_saveFile, "w+") as output:
+				json.dump(self.player.y, output)
+	
+	def setup(self):
+		self.player = Player()
+		if self.load.loaded == "false":
+			self.load.importX = 0
+			self.load.importY = 0
+			
+		self.player.setup(self.load.importX, self.load.importY)
+		self.knownTerrain()
+		if self.load.loaded == "true":
+			self.newTerrain()
+	
+	def __init__(self):
+		self.player = None
+        # TODO: fill world with objects
+	
+	def newTerrain(self):
+		temp_list = []
+		self.ground = random.choice(GROUND_TYPES)
+		self.attribute = random.choice(ATTRIBUTE_TYPES)
+		self.level = random.choice(LEVEL_TYPES)
+		water_chance = random.randint(1, 100)
+		if water_chance <= 40:
+			self.water = random.choice(WATER_TYPES)
+			temp_x = self.player.x
+			temp_y = self.player.y
+			temp_list.append(temp_x)
+			temp_list.append(temp_y)
+			temp_list.append(self.ground)
+			temp_list.append(self.attribute)
+			temp_list.append(self.level)
+			temp_list.append(self.water)
+			objects.append(temp_list)
+		else:
+			self.water = "none"
+			temp_x = self.player.x
+			temp_y = self.player.y
+			temp_list.append(temp_x)
+			temp_list.append(temp_y)
+			temp_list.append(self.ground)
+			temp_list.append(self.attribute)
+			temp_list.append(self.level)
+			temp_list.append(self.water)
+			objects.append(temp_list)
+			
+	def knownTerrain(self):
+		for object in objects:
+			if self.player.x == object[0] and self.player.y == object[1]:
+				if object[5] != "none":
+					print("found:", object[2],object[3],object[4],object[5])
+				else:
+					print("found:", object[2],object[3],object[4])
+				v = "true"
+				break
+			else:
+				v = "false"
+		if v == "false":
+			self.newTerrain()
+			self.knownTerrain()
+				
+	def on_draw(self):
+        #Render the screen.
+	
+        # teken speler
+		print("Player is: ", self.player.x, self.player.y)
+		print()
+        # teken objecten
+            # teken object
+	#	for object in objects:
+	#		if self.player.x = object[0] and self.player.y = object[1]:
+	#			if object[5] != "none":
+	#				print("found", object[0], object[1], object[2],object[3],object[4],object[5])
+	#				break
+	#			else:
+	#				break
+					
+	def on_update(self):
+        # TODO: alle geldigde instructies in een lijst zetten
+        # TODO: user input checken (geen cijfers etc.)
+        # TODO: user input naar lower case?
+		command = input("> ")
+		if command == "forward":
+			print()
+			self.player.y += 1
+			playerY = self.player.y
+			playerX = self.player.x
+			self.knownTerrain()
+		elif command == "back":
+			print()
+			self.player.y -= 1
+			playerY = self.player.y
+			playerX = self.player.x
+			self.knownTerrain()
+		elif command == "left":
+			print()
+			self.player.x += 1
+			playerY = self.player.y
+			playerX = self.player.x
+			self.knownTerrain()
+		elif command == "right":
+			print()
+			self.player.x -= 1
+			playerY = self.player.y
+			playerX = self.player.x
+			self.knownTerrain()
+		elif command == "help":
+			print("forward")
+			print("back")
+			print("left")
+			print("right")
+			print("help")
+		elif command == "save":
+			self.save()
+
+		else:
+			print("invalid input")
+
+def main():
+	world = World()
+	world.startup()
+	world.setup()
+	while True:
+		world.on_draw()
+		world.on_update()
+
+if __name__ == "__main__":
+	main()
