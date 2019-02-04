@@ -5,6 +5,9 @@ import random
 import json
 import os
 import shutil
+import sys
+import keyboard
+import time
 
 try:
 	with open("saves/saveNames.json") as file_in:
@@ -24,36 +27,94 @@ importX = ""
 importY = ""
 Print = ""
 
+def menuOptions(currentOption, option1, option2, option3, menuName):
+
+	os.system("cls")
+	textPrint()
+	print()
+	print(menuName)
+	if currentOption == 1:
+		print(option1 + " <")
+		print(option2)
+		print(option3)
+	elif currentOption == 2:
+		print(option1)
+		print(option2 + " <")
+		print(option3)
+	elif currentOption == 3:
+		print(option1)
+		print(option2)
+		print(option3 + " <")
+		
+def menu(direction, option1, option2, option3, menuName):
+
+	if direction == "down":
+		if world.selOption == 1:
+			world.selOption = 2
+		elif world.selOption == 2:
+			world.selOption = 3
+		elif world.selOption == 3:
+			world.selOption = 1
+		menuOptions(world.selOption, option1, option2, option3, menuName)
+		time.sleep(0.2)
+	elif direction == "up":
+		if world.selOption == 1:
+			world.selOption = 3
+		elif world.selOption == 2:
+			world.selOption = 1
+		elif world.selOption == 3:
+			world.selOption = 2
+		menuOptions(world.selOption, option1, option2, option3, menuName)
+		time.sleep(0.2)
+
+def textPrint():
+	print ("  _____         _    ____            __ _   ")
+	print (" |_   _|____  _| |_ / ___|_ __ __ _ / _| |_ ")
+	print ("   | |/ _ \ \\/ / __| |   | '__/ _` | |_| __|")
+	print ("   | |  __/>  <| |_| |___| | | (_| |  _| |_ ") 
+	print ("   |_|\\___/_/\\_\\\__|\\____|_|  \\__,_|_|  \\__|")
+
 class loadGame():
 	def content(self):
-		print("save name:")
-		loadFile = input("> ")
-		
-		#try:
-		with open("saves/" + loadFile + "/world.json") as file_in:
-			temp_objectsVar = json.load(file_in)
-			for object in temp_objectsVar:
-				objects.append(object)
+		world.loadTries += 1
+		if world.loadTries == 1:
+			pass
+		else:
+			print("save name:")
+		loadFile = input("")
+		if loadFile == exit:
+			pass
+		else:
+			try:
+				with open("saves/" + loadFile + "/world.json") as file_in:
+					temp_objectsVar = json.load(file_in)
+					for object in temp_objectsVar:
+						objects.append(object)
 	
-		with open("saves/" + loadFile + "/player/playerX.json") as file_in:
-			self.importX = json.load(file_in)
-		
-		with open("saves/" + loadFile + "/player/playerY.json") as file_in:
-			self.importY = json.load(file_in)
+				with open("saves/" + loadFile + "/player/playerX.json") as file_in:
+					self.importX = json.load(file_in)
+			
+				with open("saves/" + loadFile + "/player/playerY.json") as file_in:
+					self.importY = json.load(file_in)
 				
-		with open("saves/" + loadFile + "/player/inventory.json") as file_in:
-			self.inventory = json.load(file_in)
+				with open("saves/" + loadFile + "/player/inventory.json") as file_in:
+					self.inventory = json.load(file_in)
 			
-		with open("saves/" + loadFile + "/settings/water.json") as file_in:
-			self.settingWaterChance = json.load(file_in)
+				with open("saves/" + loadFile + "/settings/water.json") as file_in:
+					world.settingWaterChance = json.load(file_in)
 			
-		with open("saves/" + loadFile + "/settings/inventory.json") as file_in:
-			self.invMax = json.load(file_in)
+				with open("saves/" + loadFile + "/settings/inventory.json") as file_in:
+					world.invMax = json.load(file_in)
 			
-		self.loaded = "true"
-		#except:
-		#	print("save does not exist")
-		#	self.loaded = "false"
+				self.loaded = "true"
+				os.system("cls")
+				print("loading game...")
+			except:
+				if world.loadTries == 1:
+					pass
+				else:
+					print("save does not exist")
+				self.loaded = "false"
 class Player():
     """ Player class. """
 
@@ -73,280 +134,322 @@ class World():
 		command = ""
 		self.invMax = 8
 		self.settingWaterChance = 40
-		print ("  _____         _    ____            __ _   ")
-		print (" |_   _|____  _| |_ / ___|_ __ __ _ / _| |_ ")
-		print ("   | |/ _ \ \\/ / __| |   | '__/ _` | |_| __|")
-		print ("   | |  __/>  <| |_| |___| | | (_| |  _| |_ ") 
-		print ("   |_|\\___/_/\\_\\\__|\\____|_|  \\__,_|_|  \\__|")  
-		print ("")
-		print("Welcome to the menu. Type help for options")
+		os.system("cls")
+		textPrint()
+		print()
+		print()
+		print("new  <")
+		print("load")
+		print("exit")
+		self.selOption = 1
 		self.load = loadGame()
+		self.loadTries = 0
 		while True:
-			command = input("> ")
-			if command == "help":
-				print()
-				print("help")
-				print("load")
-				print("new")
-				print("clear")
-			elif command == "load":
-				self.load.content()
-				if self.load.loaded == "true":
-					break
-				else:
-					self.load.loaded = "false"
+			if keyboard.is_pressed("down"):
+		
+				menu("down", "new ", "load", "exit", "")
 			
-			elif command == "clear":
-				os.system("cls")
-					
-			elif command == "new":
-				print()
-				self.load.loaded = "false"
-				break
-	
+			elif keyboard.is_pressed("up"):
+			
+				menu("up", "new ", "load", "exit", "")
+			
+			elif keyboard.is_pressed("enter"):
+				
+				if self.selOption == 1:
+					print()
+					self.load.loaded = "false"
+					break
+				elif selOption == 2:
+					self.self.load.content()
+					if self.load.loaded == "true":
+						break
+					else:
+						self.load.loaded = "false"
+				elif self.selOption == 3:
+					sys.exit()
+		
+			else:
+				pass
+			
 	def delete(self):
 		print()
 		print("save name:")
 		save_name = input("> ")
-		temp_saveLocation = "saves/" + save_name
-		try:
-			shutil.rmtree(temp_saveLocation)
-			
-			with open("saves/saveNames.json", "r") as file_in:
-				saveList = []
-				saveVar = json.load(file_in)
-				saveList.append(saveVar)
-				saveList = saveList[0]
-				saveList.remove(save_name)
-				
-				with open("saves/saveNames.json", "w+") as output:
-					json.dump(saveList, output)
-			
-			with open("saves/saveNames.json", "r") as file_in:
-				saveVar = json.load(file_in)
-			if saveVar == []:
-				with open("saves/saveNames.json", "w+") as output:
-					json.dump("", output)
-					
-			print("delete completed")
-			
-		except:
-			print("save doesnt exist")
-		
-	def save(self):
-		print("save name:")
-		save_name = input("> ")
-		
-		with open("saves/saveNames.json", "r") as file_in:
-			saveList = json.load(file_in)
-			
-		if saveList == "":
-				
-			v = "true"
-				
-			temp_saveLocation = "saves/" + save_name
-			
-			os.mkdir(temp_saveLocation)
-			
-			temp_saveFile = temp_saveLocation + "/world.json"
-		
-			with open(temp_saveFile, 'w+') as output:
-				json.dump(objects, output)
-				
-			os.mkdir("saves/" + save_name + "/player")
-			
-			temp_saveFile = temp_saveLocation + "/player/inventory.json"
-			with open(temp_saveFile, "w+") as output:
-				json.dump(self.load.inventory, output)
-				
-			temp_saveFile = temp_saveLocation + "/player/playerX.json"
-				
-			with open(temp_saveFile, "w+") as output:
-				json.dump(self.player.x, output)
-			
-			temp_saveFile = temp_saveLocation + "/player/playerY.json"
-				
-			with open(temp_saveFile, "w+") as output:
-				json.dump(self.player.y, output)
-				
-			temp_saveFile = temp_saveLocation + "/settings/water.json"
-				
-			with open(temp_saveFile, "w+") as output:
-				json.dump(self.settingWaterChance, output)
-				
-			temp_saveFile = temp_saveLocation + "/settings/inventory.json"
-				
-			with open(temp_saveFile, "w+") as output:
-				json.dump(self.invMax, output)
-			
-			saveList = []
-			saveList.append(save_name)
-			
-			with open("saves/saveNames.json", "w+") as output:
-				json.dump(saveList, output)
-			
-			print()
-			print("save complete")
-		
+		if save_name == "":
+			print("you must enter a save name")
 		else:
-	
-			for object in saveList:
-				if object == save_name:
-					v = "true"
-					print()
-					print("save already exists")
-					print("overwrite?")
-					while True:
-						overwrite = input("(y/n)> ")
-						if overwrite == "y":
-							
-							temp_saveLocation = "saves/" + save_name
-							temp_saveFile = temp_saveLocation + "/world.json"
-							
-							shutil.rmtree(temp_saveLocation)
-							
-							while True:
-								try:
-									os.mkdir(temp_saveLocation)
-									break
-								except:
-									v = "true"
-									
-							with open(temp_saveFile, 'w+') as output:
-								json.dump(objects, output)
+			temp_saveLocation = "saves/" + save_name
+			try:
+				shutil.rmtree(temp_saveLocation)
 				
-							os.mkdir("saves/" + save_name + "/player")
-				
-							temp_saveFile = temp_saveLocation + "/player/playerX.json"
-				
-							with open(temp_saveFile, "w+") as output:
-								json.dump(self.player.x, output)
-							
-							temp_saveFile = temp_saveLocation + "/player/inventory.json"
-							with open(temp_saveFile, "w+") as output:
-								json.dump(self.load.inventory, output)
-							
-							temp_saveFile = temp_saveLocation + "/player/playerY.json"
-				
-							with open(temp_saveFile, "w+") as output:
-								json.dump(self.player.y, output)
-								
-							temp_saveFile = temp_saveLocation + "/settings/water.json"
-				
-							with open(temp_saveFile, "w+") as output:
-								json.dump(self.settingWaterChance, output)
-				
-							temp_saveFile = temp_saveLocation + "/settings/inventory.json"
-				
-							with open(temp_saveFile, "w+") as output:
-								json.dump(self.invMax, output)
-							
-							print()
-							print("save overwritten")
-							break
-							
-						elif overwrite == "n":
-							print()
-							print("save cancelled")
-							break
-						else:
-							print("please enter y or n")
-			
-				else:	
-					v = "false"
-		
-			if v == "false":
-				temp_saveLocation = "saves/" + save_name
-			
-				os.mkdir(temp_saveLocation)
-				temp_saveFile = temp_saveLocation + "/world.json"
-		
-				with open(temp_saveFile, 'w+') as output:
-					json.dump(objects, output)
-				
-				os.mkdir("saves/" + save_name + "/player")
-				
-				temp_saveFile = temp_saveLocation + "/player/playerX.json"
-				
-				with open(temp_saveFile, "w+") as output:
-					json.dump(self.player.x, output)
-				
-				temp_saveFile = temp_saveLocation + "/player/inventory.json"
-				
-				with open(temp_saveFile, "w+") as output:
-					json.dump(self.load.inventory, output)
-				
-				temp_saveFile = temp_saveLocation + "/player/playerY.json"
-				
-				with open(temp_saveFile, "w+") as output:
-					json.dump(self.player.y, output)
-					
-				temp_saveFile = temp_saveLocation + "/settings/water.json"
-				
-				with open(temp_saveFile, "w+") as output:
-					json.dump(self.settingWaterChance, output)
-				
-				temp_saveFile = temp_saveLocation + "/settings/inventory.json"
-					
-				with open(temp_saveFile, "w+") as output:
-					json.dump(self.invMax, output)
-			
 				with open("saves/saveNames.json", "r") as file_in:
 					saveList = []
 					saveVar = json.load(file_in)
 					saveList.append(saveVar)
 					saveList = saveList[0]
-					saveList.append(save_name)
+					saveList.remove(save_name)
+					
+					with open("saves/saveNames.json", "w+") as output:
+						json.dump(saveList, output)
+				
+				with open("saves/saveNames.json", "r") as file_in:
+					saveVar = json.load(file_in)
+				if saveVar == []:
+					with open("saves/saveNames.json", "w+") as output:
+						json.dump("", output)
+						
+				print("delete completed")
+				
+			except:
+				print("save doesnt exist")
+		
+	def save(self):
+		print("save name:")
+		save_name = input("> ")
+		if save_name == "":
+			print("you must enter a save name")
+		else:
+		
+			with open("saves/saveNames.json", "r") as file_in:
+				saveList = json.load(file_in)
 			
+			if saveList == "":
+					
+				v = "true"
+				
+				temp_saveLocation = "saves/" + save_name
+				
+				os.mkdir(temp_saveLocation)
+				os.mkdir(temp_saveLocation + "/settings")
+				
+				temp_saveFile = temp_saveLocation + "/world.json"
+			
+				with open(temp_saveFile, 'w+') as output:
+					json.dump(objects, output)
+					
+				os.mkdir("saves/" + save_name + "/player")
+				
+				temp_saveFile = temp_saveLocation + "/player/inventory.json"
+				with open(temp_saveFile, "w+") as output:
+					json.dump(self.load.inventory, output)
+					
+				temp_saveFile = temp_saveLocation + "/player/playerX.json"
+					
+				with open(temp_saveFile, "w+") as output:
+					json.dump(self.player.x, output)
+				
+				temp_saveFile = temp_saveLocation + "/player/playerY.json"
+					
+				with open(temp_saveFile, "w+") as output:
+					json.dump(self.player.y, output)
+					
+				temp_saveFile = temp_saveLocation + "/settings/water.json"
+					
+				with open(temp_saveFile, "w+") as output:
+					json.dump(self.settingWaterChance, output)
+					
+				temp_saveFile = temp_saveLocation + "/settings/inventory.json"
+					
+				with open(temp_saveFile, "w+") as output:
+					json.dump(self.invMax, output)
+				
+				saveList = []
+				saveList.append(save_name)
+				
 				with open("saves/saveNames.json", "w+") as output:
 					json.dump(saveList, output)
-					
+				
+				print()
 				print("save complete")
+			
+			else:
+		
+				for object in saveList:
+					if object == save_name:
+						v = "true"
+						print()
+						print("save already exists")
+						print("overwrite?")
+						while True:
+							overwrite = input("(y/n)> ")
+							if overwrite == "y":
+								
+								temp_saveLocation = "saves/" + save_name
+								temp_saveFile = temp_saveLocation + "/world.json"
+								
+								shutil.rmtree(temp_saveLocation)
+								
+								while True:
+									try:
+										os.mkdir(temp_saveLocation)
+										os.mkdir(temp_saveLocation + "/settings")
+										break
+									except:
+										v = "true"
+										
+								with open(temp_saveFile, 'w+') as output:
+									json.dump(objects, output)
+					
+								os.mkdir("saves/" + save_name + "/player")
+					
+								temp_saveFile = temp_saveLocation + "/player/playerX.json"
+					
+								with open(temp_saveFile, "w+") as output:
+									json.dump(self.player.x, output)
+								
+								temp_saveFile = temp_saveLocation + "/player/inventory.json"
+								with open(temp_saveFile, "w+") as output:
+									json.dump(self.load.inventory, output)
+								
+								temp_saveFile = temp_saveLocation + "/player/playerY.json"
+					
+								with open(temp_saveFile, "w+") as output:
+									json.dump(self.player.y, output)
+									
+								temp_saveFile = temp_saveLocation + "/settings/water.json"
+					
+								with open(temp_saveFile, "w+") as output:
+									json.dump(self.settingWaterChance, output)
+					
+								temp_saveFile = temp_saveLocation + "/settings/inventory.json"
+					
+								with open(temp_saveFile, "w+") as output:
+									json.dump(self.invMax, output)
+								
+								print()
+								print("save overwritten")
+								break
+								
+							elif overwrite == "n":
+								print()
+								print("save cancelled")
+								break
+							else:
+								print("please enter y or n")
+				
+					else:	
+						v = "false"
+			
+				if v == "false":
+					temp_saveLocation = "saves/" + save_name
+				
+					os.mkdir(temp_saveLocation)
+					os.mkdir(temp_saveLocation + "/settings")
+					temp_saveFile = temp_saveLocation + "/world.json"
+			
+					with open(temp_saveFile, 'w+') as output:
+						json.dump(objects, output)
+					
+					os.mkdir("saves/" + save_name + "/player")
+					
+					temp_saveFile = temp_saveLocation + "/player/playerX.json"
+					
+					with open(temp_saveFile, "w+") as output:
+						json.dump(self.player.x, output)
+					
+					temp_saveFile = temp_saveLocation + "/player/inventory.json"
+					
+					with open(temp_saveFile, "w+") as output:
+						json.dump(self.load.inventory, output)
+					
+					temp_saveFile = temp_saveLocation + "/player/playerY.json"
+					
+					with open(temp_saveFile, "w+") as output:
+						json.dump(self.player.y, output)
+						
+					temp_saveFile = temp_saveLocation + "/settings/water.json"
+					
+					with open(temp_saveFile, "w+") as output:
+						json.dump(self.settingWaterChance, output)
+					
+					temp_saveFile = temp_saveLocation + "/settings/inventory.json"
+						
+					with open(temp_saveFile, "w+") as output:
+						json.dump(self.invMax, output)
+				
+					with open("saves/saveNames.json", "r") as file_in:
+						saveList = []
+						saveVar = json.load(file_in)
+						saveList.append(saveVar)
+						saveList = saveList[0]
+						saveList.append(save_name)
+				
+					with open("saves/saveNames.json", "w+") as output:
+						json.dump(saveList, output)
+						
+					print("save complete")
 	
 	def settings(self):
+		time.sleep(0.5)
+		os.system("cls")
+		textPrint()
+		print()
+		print("- game settings:")
+		print("inventory <")
+		print("water")
+		print("done")
+		self.selOption = 1
 		while True:
-			setting = input("settings: ")
-			if setting == "help":
-				print()
-				print("inventory")
-				print("water")
-				print("help")
-				print("done")
-			elif setting == "inventory":
-				print()
-				print("inventory max is " + str(self.invMax))
-				print()
-				while True:
-					setting = input("set inventory max: ")
-					try:
+			if keyboard.is_pressed("down"):
+		
+				menu("down", "inventory", "water    ", "done     ", "- game settings:")
+				
+			elif keyboard.is_pressed("up"):
+			
+				menu("up", "inventory", "water    ", "done     ", "- game settings:")
+			
+			elif keyboard.is_pressed("enter"):
+				time.sleep(0.5)
+				if self.selOption == 1:
+				
+					print()
+					print("inventory max is " + str(self.invMax))
+					while True:
+						setting = ""
+						self.tries = 0
+						while True:
+							self.tries += 1
+							if self.tries == 3:
+								print("set inventory max:")
+							else:
+								pass
+							setting = input()
+							if setting != "":
+								break
+						#try:
 						self.invMax = int(setting)
 						print()
 						print("set inventory max to " + str(self.invMax))
+						time.sleep(1)
 						break
-					except:
-						print()
-						print("you must enter a number")
-					
-			elif setting == "water":
-				print()
-				print("water chance is " + str(self.settingWaterChance))
-				print()
-				while True:
-					setting = input("set water chance: ")
-					try:
-						self.settingWaterChance = int(setting)
-						print()
-						print("set water chance to " + str(self.settingWaterChance))
+						#except:
+							#print()
+							#print("you must enter a number")
+							
+				elif selOption == 2:
+				
+					print()
+					print("water chance is " + str(self.settingWaterChance))
+					print()
+					while True:
+						setting = input("set water chance: ")
+						try:
+							self.settingWaterChance = int(setting)
+							print()
+							print("set water chance to " + str(self.settingWaterChance))
+							break
+						except:
+							print()
+							print("you must enter a number")
+							break
 						break
-					except:
-						print()
-						print("you must enter a number")
-						
-			elif setting == "done":
-				print()
-				print()
-				print("Starting new game...")
-				break
+				elif self.selOption == 3:
+					print()
+					print()
+					print("Starting new game...")
+					break
+				if self.selOption != 3:
+					self.settings()
 
 	def setup(self):
 		self.menuReturn = "false"
@@ -483,7 +586,7 @@ class World():
 							break
 						else:
 							v = "false"
-							inventory.append(material)
+							self.load.inventory.append(material)
 				else:
 					v = "false"
 			if v == "false":
@@ -659,7 +762,8 @@ class World():
 				if self.answer == "y":
 					self.menuReturn = "true"
 					break
-				elif answer == "n":
+				elif self.answer == "n":
+					print()
 					self.menuReturn = "false"
 					break
 				else:
@@ -668,13 +772,14 @@ class World():
 		elif command == "craft":
 			craft = input("craft: ")
 			if craft == "pickaxe":
-				self.craft("pickaxe", "wood", "wood", 1)
+				self.craft("pickaxe", "wood", "wood", 2)
 			else:
 				print("that is not a craftable item")		
 		else:
 			print("invalid input")
 
 def main():
+	time.sleep(1)
 	os.system("cls")
 	world.startup()
 	world.setup()
