@@ -400,6 +400,7 @@ class World():
 			
 			elif keyboard.is_pressed("enter"):
 				time.sleep(0.5)
+				
 				if self.selOption == 1:
 				
 					print()
@@ -416,34 +417,44 @@ class World():
 							setting = input()
 							if setting != "":
 								break
-						#try:
-						self.invMax = int(setting)
-						print()
-						print("set inventory max to " + str(self.invMax))
-						time.sleep(1)
-						break
-						#except:
-							#print()
-							#print("you must enter a number")
-							
-				elif selOption == 2:
-				
-					print()
-					print("water chance is " + str(self.settingWaterChance))
-					print()
-					while True:
-						setting = input("set water chance: ")
 						try:
-							self.settingWaterChance = int(setting)
+							self.invMax = int(setting)
 							print()
-							print("set water chance to " + str(self.settingWaterChance))
+							print("set inventory max to " + str(self.invMax))
+							time.sleep(1)
 							break
 						except:
 							print()
 							print("you must enter a number")
+							
+				elif self.selOption == 2:
+				
+					print()
+					print("water chance is " + str(self.settingWaterChance))
+					while True:
+						setting = ""
+						self.tries = 0
+						while True:
+							self.tries += 1
+							if self.tries == 3:
+								print("set water chance:")
+							else:
+								pass
+							setting = input()
+							if setting != "":
+								break
+						try:
+							self.settingWaterChance = int(setting)
+							print()
+							print("set water chance to " + str(self.settingWaterChance))
+							time.sleep(1)
 							break
-						break
+						except:
+							print()
+							print("you must enter a number")
+							
 				elif self.selOption == 3:
+					os.system("cls")
 					print()
 					print()
 					print("Starting new game...")
@@ -465,10 +476,8 @@ class World():
 		if self.load.loaded == "false":
 			self.newTerrain()
 			self.knownTerrain()
-			print()
 		else:
 			self.knownTerrain()
-			print()
 		print("Player is: ", self.player.x, self.player.y)
 	def __init__(self):
 		self.player = None
@@ -609,10 +618,10 @@ class World():
 	#				break
 					
 	def on_update(self):
-        # TODO: alle geldigde instructies in een lijst zetten
-        # TODO: user input checken (geen cijfers etc.)
-        # TODO: user input naar lower case?
+		time.sleep(0.2)
 		command = input("> ")
+				
+		
 		if command == "forward":
 			print()
 			self.player.x += 1
@@ -783,6 +792,8 @@ def main():
 	os.system("cls")
 	world.startup()
 	world.setup()
+	command = input()
+	command = input()
 	while True:
 		#world.on_draw()
 		world.itemCheck()
