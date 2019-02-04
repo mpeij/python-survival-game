@@ -159,8 +159,8 @@ class World():
 					print()
 					self.load.loaded = "false"
 					break
-				elif selOption == 2:
-					self.self.load.content()
+				elif self.selOption == 2:
+					self.load.content()
 					if self.load.loaded == "true":
 						break
 					else:
@@ -587,7 +587,7 @@ class World():
 					self.load.inventory.remove(material)
 					for object in self.load.inventory:
 						if object == material2:
-							self.load.inventory.remove(material)
+							self.load.inventory.remove(material2)
 							self.load.inventory.append(product)
 							print()
 							print("crafted " + product)
@@ -619,6 +619,7 @@ class World():
 					
 	def on_update(self):
 		time.sleep(0.2)
+		print()
 		command = input("> ")
 				
 		
@@ -792,8 +793,6 @@ def main():
 	os.system("cls")
 	world.startup()
 	world.setup()
-	command = input()
-	command = input()
 	while True:
 		#world.on_draw()
 		world.itemCheck()
