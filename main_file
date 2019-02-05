@@ -158,8 +158,10 @@ class World():
 				if self.selOption == 1:
 					print()
 					self.load.loaded = "false"
+					w = input()
 					break
 				elif self.selOption == 2:
+					w = input()
 					self.load.content()
 					if self.load.loaded == "true":
 						break
@@ -380,6 +382,7 @@ class World():
 					print("save complete")
 	
 	def settings(self):
+		self.settingChanged = "false"
 		time.sleep(0.5)
 		os.system("cls")
 		textPrint()
@@ -400,54 +403,57 @@ class World():
 			
 			elif keyboard.is_pressed("enter"):
 				time.sleep(0.5)
-				
+				w = input()
+				os.system("cls")
+				textPrint()
+				print()
+				print("- game settings:")
+				print("inventory")
+				print("water")
+				print("done")
 				if self.selOption == 1:
-				
+					
 					print()
 					print("inventory max is " + str(self.invMax))
 					while True:
-						setting = ""
-						self.tries = 0
-						while True:
-							self.tries += 1
-							if self.tries == 3:
-								print("set inventory max:")
-							else:
-								pass
-							setting = input()
-							if setting != "":
-								break
+						setting = input("set inventory max: ")
 						try:
 							self.invMax = int(setting)
 							print()
 							print("set inventory max to " + str(self.invMax))
 							time.sleep(1)
+							os.system("cls")
+							textPrint()
+							print()
+							print("- game settings:")
+							print("inventory")
+							print("water")
+							print("done")
 							break
 						except:
 							print()
 							print("you must enter a number")
 							
 				elif self.selOption == 2:
-				
+					
 					print()
 					print("water chance is " + str(self.settingWaterChance))
 					while True:
-						setting = ""
-						self.tries = 0
-						while True:
-							self.tries += 1
-							if self.tries == 3:
-								print("set water chance:")
-							else:
-								pass
-							setting = input()
-							if setting != "":
-								break
+						print("set water chance:")
+						setting = input()
+						
 						try:
 							self.settingWaterChance = int(setting)
 							print()
 							print("set water chance to " + str(self.settingWaterChance))
 							time.sleep(1)
+							os.system("cls")
+							textPrint()
+							print()
+							print("- game settings:")
+							print("inventory")
+							print("water")
+							print("done")
 							break
 						except:
 							print()
@@ -455,13 +461,11 @@ class World():
 							
 				elif self.selOption == 3:
 					os.system("cls")
-					print()
-					print()
 					print("Starting new game...")
 					break
-				if self.selOption != 3:
-					self.settings()
-
+		if self.selOption != 3:
+			settings()
+					
 	def setup(self):
 		self.menuReturn = "false"
 		self.player = Player()
@@ -474,6 +478,7 @@ class World():
 		self.player.setup(self.load.importX, self.load.importY)
 		print()
 		if self.load.loaded == "false":
+			print()
 			self.newTerrain()
 			self.knownTerrain()
 		else:
@@ -782,7 +787,7 @@ class World():
 		elif command == "craft":
 			craft = input("craft: ")
 			if craft == "pickaxe":
-				self.craft("pickaxe", "wood", "wood", 2)
+				self.craft("pickaxe", "wood", "wood", 1)
 			else:
 				print("that is not a craftable item")		
 		else:
@@ -798,6 +803,8 @@ def main():
 		world.itemCheck()
 		world.on_update()
 		if world.menuReturn == "true":
+			objects = []
+			inventory = []
 			break
 	main()
 
