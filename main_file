@@ -76,12 +76,7 @@ def textPrint():
 
 class loadGame():
 	def content(self):
-		world.loadTries += 1
-		if world.loadTries == 1:
-			pass
-		else:
-			print("save name:")
-		loadFile = input("")
+		loadFile = input("save name: ")
 		if loadFile == exit:
 			pass
 		else:
@@ -560,7 +555,8 @@ class World():
 					self.treeOption = "false"
 		
 				if object[5] != "none":
-					self.waterOption = "true"
+					self.itemAvailable("bucket")
+					self.rockOption = self.available
 				else:
 					self.waterOption = "false"
 				
@@ -569,6 +565,12 @@ class World():
 					self.rockOption = self.available
 				else:
 					self.rockOption = "false"
+					
+				if object[2] == "grassy":
+					self.itemAvailable("knife")
+					self.foodOption = self.available
+				else:
+					self.foodOption = "false"
 				break
 	
 	def craft(self, product, material, material2, materialAmount):
@@ -599,11 +601,14 @@ class World():
 							v = "true"
 							break
 						else:
-							v = "false"
-							self.load.inventory.append(material)
+							v = "false2"
+					break
 				else:
 					v = "false"
 			if v == "false":
+				print("you dont have the required materials")
+			elif v == "false2":
+				self.load.inventory.append(material)
 				print("you dont have the required materials")
 				
 	def on_draw(self):
@@ -733,6 +738,21 @@ class World():
 				else:
 					print()
 					print("no wood to collect")
+			elif collect == "food":
+				if self.foodOption == "true":
+					x = 0
+					for object in self.load.inventory:
+						x += 1
+					if x >= self.invMax:
+						print()
+						print("inventory is full")
+					else:
+						self.load.inventory.append("food")
+						print()
+						print("collected food")
+				else:
+					print()
+					print("no food to collect")
 			elif collect == "water":
 				if self.waterOption == "true":
 					x = 0
@@ -788,6 +808,10 @@ class World():
 			craft = input("craft: ")
 			if craft == "pickaxe":
 				self.craft("pickaxe", "wood", "wood", 1)
+			elif craft == "bucket":
+				self.craft("bucket", "stone", "stone", 2)
+			elif craft == "knife":
+				self.craft("knife", "wood", "stone", 2)
 			else:
 				print("that is not a craftable item")		
 		else:
