@@ -533,7 +533,9 @@ class World():
 			self.knownTerrain()
 		else:
 			self.knownTerrain()
+		print()
 		print("Player is: ", self.player.x, self.player.y)
+		print("hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
 	def __init__(self):
 		self.player = None
         # TODO: fill world with objects
@@ -907,21 +909,25 @@ class World():
 		elif command == "consume":
 			consume = input("consume item: ")
 			if consume == "food":
-				if self.currentFood > 95:
+				if self.currentFood > 85:
 					print("food level is full")
 				else:
 					try:
 						self.load.inventory.remove("food")
 						self.currentFood += 50
+						if self.currentFood >= 100:
+							self.currentFood = 100
 					except:
 						print("no food to consume")
 			elif consume == "water":
-				if self.currentThirst > 95:
+				if self.currentThirst > 85:
 					print("thirst level is full")
 				else:
 					try:
 						self.load.inventory.remove("water")
 						self.currentThirst += 50
+						if self.currentThirst >= 100:
+							self.currentThirst = 100
 					except:
 						print("no food to consume")
 			
