@@ -92,6 +92,12 @@ class loadGame():
 	
 				with open("saves/" + loadFile + "/player/playerX.json") as file_in:
 					self.importX = json.load(file_in)
+				
+				with open("saves/" + loadFile + "/player/foodLevel.json") as file_in:
+					world.currentFood = json.load(file_in)
+					
+				with open("saves/" + loadFile + "/player/thirstLevel.json") as file_in:
+					world.currentThirst = json.load(file_in)
 			
 				with open("saves/" + loadFile + "/player/playerY.json") as file_in:
 					self.importY = json.load(file_in)
@@ -231,7 +237,18 @@ class World():
 					
 				os.mkdir("saves/" + save_name + "/player")
 				
+				temp_saveFile = temp_saveLocation + "/player/foodLevel.json"
+				
+				with open(temp_saveFile, "w+") as output:
+					json.dump(self.currentFood, output)
+					
+				temp_saveFile = temp_saveLocation + "/player/thirstLevel.json"
+				
+				with open(temp_saveFile, "w+") as output:
+					json.dump(self.currentThirst, output)
+				
 				temp_saveFile = temp_saveLocation + "/player/inventory.json"
+				
 				with open(temp_saveFile, "w+") as output:
 					json.dump(self.load.inventory, output)
 					
@@ -275,49 +292,80 @@ class World():
 						while True:
 							overwrite = input("(y/n)> ")
 							if overwrite == "y":
-								
+								#delete old save
 								temp_saveLocation = "saves/" + save_name
-								temp_saveFile = temp_saveLocation + "/world.json"
-								
 								shutil.rmtree(temp_saveLocation)
+			
+								with open("saves/saveNames.json", "r") as file_in:
+									saveList = []
+									saveVar = json.load(file_in)
+									saveList.append(saveVar)
+									saveList = saveList[0]
+									saveList.remove(save_name)
+									
+									with open("saves/saveNames.json", "w+") as output:
+										json.dump(saveList, output)
 								
-								while True:
-									try:
-										os.mkdir(temp_saveLocation)
-										os.mkdir(temp_saveLocation + "/settings")
-										break
-									except:
-										v = "true"
+								with open("saves/saveNames.json", "r") as file_in:
+									saveVar = json.load(file_in)
+								if saveVar == []:
+									with open("saves/saveNames.json", "w+") as output:
+										json.dump("", output)
 										
+								#re-save
+								temp_saveLocation = "saves/" + save_name
+			
+								os.mkdir(temp_saveLocation)
+								os.mkdir(temp_saveLocation + "/settings")
+								
+								temp_saveFile = temp_saveLocation + "/world.json"
+							
 								with open(temp_saveFile, 'w+') as output:
 									json.dump(objects, output)
-					
+									
 								os.mkdir("saves/" + save_name + "/player")
-					
+								
+								temp_saveFile = temp_saveLocation + "/player/foodLevel.json"
+								
+								with open(temp_saveFile, "w+") as output:
+									json.dump(self.currentFood, output)
+									
+								temp_saveFile = temp_saveLocation + "/player/thirstLevel.json"
+								
+								with open(temp_saveFile, "w+") as output:
+									json.dump(self.currentThirst, output)
+								
+								temp_saveFile = temp_saveLocation + "/player/inventory.json"
+								
+								with open(temp_saveFile, "w+") as output:
+									json.dump(self.load.inventory, output)
+									
 								temp_saveFile = temp_saveLocation + "/player/playerX.json"
-					
+									
 								with open(temp_saveFile, "w+") as output:
 									json.dump(self.player.x, output)
 								
-								temp_saveFile = temp_saveLocation + "/player/inventory.json"
-								with open(temp_saveFile, "w+") as output:
-									json.dump(self.load.inventory, output)
-								
 								temp_saveFile = temp_saveLocation + "/player/playerY.json"
-					
+									
 								with open(temp_saveFile, "w+") as output:
 									json.dump(self.player.y, output)
 									
 								temp_saveFile = temp_saveLocation + "/settings/water.json"
-					
+									
 								with open(temp_saveFile, "w+") as output:
 									json.dump(self.settingWaterChance, output)
-					
+									
 								temp_saveFile = temp_saveLocation + "/settings/inventory.json"
-					
+									
 								with open(temp_saveFile, "w+") as output:
 									json.dump(self.invMax, output)
 								
+								saveList = []
+								saveList.append(save_name)
+								
+								with open("saves/saveNames.json", "w+") as output:
+									json.dump(saveList, output)
+							
 								print()
 								print("save overwritten")
 								break
@@ -478,6 +526,8 @@ class World():
 		self.player.setup(self.load.importX, self.load.importY)
 		print()
 		if self.load.loaded == "false":
+			self.currentFood = 100
+			self.currentThirst = 100
 			print()
 			self.newTerrain()
 			self.knownTerrain()
@@ -594,6 +644,8 @@ class World():
 				if object == material:
 					self.load.inventory.remove(material)
 					self.load.inventory.append(product)
+					world.currentFood -= 5
+					world.currentThirst	-= 5
 					print()
 					print("crafted " + product)
 					v = "true"
@@ -610,6 +662,8 @@ class World():
 						if object == material2:
 							self.load.inventory.remove(material2)
 							self.load.inventory.append(product)
+							world.currentFood -= 5
+							world.currentThirst	-= 5
 							print()
 							print("crafted " + product)
 							v = "true"
@@ -630,6 +684,7 @@ class World():
 	
         # teken speler
 		print("Player is: ", self.player.x, self.player.y)
+		print("hunger: " + self.currentFood + " thirst: " + self.currentThirst)
 		print()
         # teken objecten
             # teken object
@@ -655,6 +710,9 @@ class World():
 			self.knownTerrain()
 			print()
 			print("Player is: ", self.player.x, self.player.y)
+			self.currentFood -= 5
+			self.currentThirst -= 5
+			print("hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
 		elif command == "back":
 			print()
 			self.player.x-= 1
@@ -663,6 +721,9 @@ class World():
 			self.knownTerrain()
 			print()
 			print("Player is: ", self.player.x, self.player.y)
+			self.currentFood -= 5
+			self.currentThirst -= 5
+			print("hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
 		elif command == "left":
 			print()
 			self.player.y+= 1
@@ -671,6 +732,9 @@ class World():
 			self.knownTerrain()
 			print()
 			print("Player is: ", self.player.x, self.player.y)
+			self.currentFood -= 5
+			self.currentThirst -= 5
+			print("hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
 		elif command == "right":
 			print()
 			self.player.y-= 1
@@ -679,6 +743,9 @@ class World():
 			self.knownTerrain()
 			print()
 			print("Player is: ", self.player.x, self.player.y)
+			self.currentFood -= 5
+			self.currentThirst -= 5
+			print("hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
 		elif command == "help":
 			print()
 			print("forward")
@@ -693,6 +760,7 @@ class World():
 			print("craft")
 			print("clear")
 			print("help")
+			print("consume")
 		elif command == "save":
 			self.save()
 		elif command == "delete":
@@ -747,6 +815,8 @@ class World():
 						print("inventory is full")
 					else:
 						self.load.inventory.append("wood")
+						self.currentFood -= 5
+						self.currentThirst -= 5
 						print()
 						print("collected wood")
 				else:
@@ -762,6 +832,8 @@ class World():
 						print("inventory is full")
 					else:
 						self.load.inventory.append("food")
+						self.currentFood -= 5
+						self.currentThirst -= 5
 						print()
 						print("collected food")
 				elif self.foodOption == "false2":
@@ -780,6 +852,8 @@ class World():
 						print("inventory is full")
 					else:
 						self.load.inventory.append("water")
+						self.currentFood -= 5
+						self.currentThirst -= 5
 						print()
 						print("collected water")
 				elif self.waterOption == "false2":
@@ -798,6 +872,8 @@ class World():
 						print("inventory is full")
 					else:
 						self.load.inventory.append("stone")
+						self.currentFood -= 5
+						self.currentThirst -= 5
 						print()
 						print("collected stone")
 				elif self.rockOption == "false2":
@@ -828,6 +904,27 @@ class World():
 				else:
 					print("please enter y or n")
 					
+		elif command == "consume":
+			consume = input("consume item: ")
+			if consume == "food":
+				if self.currentFood > 95:
+					print("food level is full")
+				else:
+					try:
+						self.load.inventory.remove("food")
+						self.currentFood += 50
+					except:
+						print("no food to consume")
+			elif consume == "water":
+				if self.currentThirst > 95:
+					print("thirst level is full")
+				else:
+					try:
+						self.load.inventory.remove("water")
+						self.currentThirst += 50
+					except:
+						print("no food to consume")
+			
 		elif command == "craft":
 			craft = input("craft: ")
 			if craft == "pickaxe":
