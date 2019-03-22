@@ -96,6 +96,9 @@ class loadGame():
 				with open("saves/" + loadFile + "/player/foodLevel.json") as file_in:
 					world.currentFood = json.load(file_in)
 					
+				with open("saves/" + loadFile + "/player/healthLevel.json") as file_in:
+					world.currentHealth = json.load(file_in)
+					
 				with open("saves/" + loadFile + "/player/thirstLevel.json") as file_in:
 					world.currentThirst = json.load(file_in)
 			
@@ -246,6 +249,11 @@ class World():
 				
 				with open(temp_saveFile, "w+") as output:
 					json.dump(self.currentThirst, output)
+					
+				temp_saveFile = temp_saveLocation + "/player/healthLevel.json"
+				
+				with open(temp_saveFile, "w+") as output:
+					json.dump(self.currentHealth, output)
 				
 				temp_saveFile = temp_saveLocation + "/player/inventory.json"
 				
@@ -334,6 +342,11 @@ class World():
 								
 								with open(temp_saveFile, "w+") as output:
 									json.dump(self.currentThirst, output)
+									
+								temp_saveFile = temp_saveLocation + "/player/healthLevel.json"
+								
+								with open(temp_saveFile, "w+") as output:
+									json.dump(self.currentHealth, output)
 								
 								temp_saveFile = temp_saveLocation + "/player/inventory.json"
 								
@@ -528,6 +541,7 @@ class World():
 		if self.load.loaded == "false":
 			self.currentFood = 100
 			self.currentThirst = 100
+			self.currentHealth = 100
 			print()
 			self.newTerrain()
 			self.knownTerrain()
@@ -535,7 +549,7 @@ class World():
 			self.knownTerrain()
 		print()
 		print("Player is: ", self.player.x, self.player.y)
-		print("hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
+		print("health: " + str(self.currentHealth) + " hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
 	def __init__(self):
 		self.player = None
         # TODO: fill world with objects
@@ -686,7 +700,7 @@ class World():
 	
         # teken speler
 		print("Player is: ", self.player.x, self.player.y)
-		print("hunger: " + self.currentFood + " thirst: " + self.currentThirst)
+		print("health: " + str(self.currentHealth) + " hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
 		print()
         # teken objecten
             # teken object
@@ -714,7 +728,7 @@ class World():
 			print("Player is: ", self.player.x, self.player.y)
 			self.currentFood -= 5
 			self.currentThirst -= 5
-			print("hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
+			print("health: " + str(self.currentHealth) + " hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
 		elif command == "back":
 			print()
 			self.player.x-= 1
@@ -725,7 +739,7 @@ class World():
 			print("Player is: ", self.player.x, self.player.y)
 			self.currentFood -= 5
 			self.currentThirst -= 5
-			print("hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
+			print("health: " + str(self.currentHealth) + " hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
 		elif command == "left":
 			print()
 			self.player.y+= 1
@@ -736,7 +750,7 @@ class World():
 			print("Player is: ", self.player.x, self.player.y)
 			self.currentFood -= 5
 			self.currentThirst -= 5
-			print("hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
+			print("health: " + str(self.currentHealth) + " hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
 		elif command == "right":
 			print()
 			self.player.y-= 1
@@ -747,7 +761,7 @@ class World():
 			print("Player is: ", self.player.x, self.player.y)
 			self.currentFood -= 5
 			self.currentThirst -= 5
-			print("hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
+			print("health: " + str(self.currentHealth) + " hunger: " + str(self.currentFood) + " thirst: " + str(self.currentThirst))
 		elif command == "help":
 			print()
 			print("forward")
