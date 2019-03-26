@@ -45,7 +45,22 @@ def menuOptions(currentOption, option1, option2, option3, menuName):
 		print(option1)
 		print(option2)
 		print(option3 + " <")
-		
+def slowPrint(letter):
+	print(letter)
+	time.sleep(0.35)
+def gameOver():
+	os.system("cls")
+	slowPrint("g")
+	slowPrint("a")
+	slowPrint("m")
+	slowPrint("e")
+	print()
+	slowPrint("o")
+	slowPrint("v")
+	slowPrint("e")
+	slowPrint("r")
+	os.system("main_file.py")
+	sys.exit()
 def menu(direction, option1, option2, option3, menuName):
 
 	if direction == "down":
@@ -660,8 +675,6 @@ class World():
 				if object == material:
 					self.load.inventory.remove(material)
 					self.load.inventory.append(product)
-					world.currentFood -= 5
-					world.currentThirst	-= 5
 					print()
 					print("crafted " + product)
 					v = "true"
@@ -678,8 +691,6 @@ class World():
 						if object == material2:
 							self.load.inventory.remove(material2)
 							self.load.inventory.append(product)
-							world.currentFood -= 5
-							world.currentThirst	-= 5
 							print()
 							print("crafted " + product)
 							v = "true"
@@ -711,7 +722,27 @@ class World():
 	#				break
 	#			else:
 	#				break
-					
+	def standardRoutine(self):
+		if self.currentFood < 0:
+			self.currentFood = 0
+		if self.currentThirst < 0:
+			self.currentThirst = 0
+		v = False
+		if world.currentFood <= 0 and world.currentThirst <= 0:
+			world.currentHealth -= 20
+			print()
+			print("you are very hungry and very thirsty")
+			v = True
+		if v == False:
+			if world.currentThirst <= 0:
+				world.currentHealth -= 10
+				print()
+				print("you are very thirsty")
+			elif world.currentFood <= 0:
+				world.currentHealth -= 10
+				print()
+				print("you are very hungry")
+		self.dead = "true"
 	def on_update(self):
 		time.sleep(0.2)
 		print()
@@ -965,8 +996,14 @@ def main():
 	world.setup()
 	while True:
 		#world.on_draw()
+		world.standardRoutine()
 		world.itemCheck()
 		world.on_update()
+		if world.currentHealth <= 0:
+			print()
+			print("you died")
+			time.sleep(3)
+			gameOver()
 		if world.menuReturn == "true":
 			objects = []
 			inventory = []
