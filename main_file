@@ -59,7 +59,7 @@ def gameOver():
 	slowPrint("v")
 	slowPrint("e")
 	slowPrint("r")
-	os.system("main_file.py")
+	os.system("main_file.exe")
 	sys.exit()
 def menu(direction, option1, option2, option3, menuName):
 
@@ -96,7 +96,7 @@ class loadGame():
 		menuOptions(2, "new", "load", "exit", "")
 		print()
 		loadFile = input("save name: ")
-		if loadFile == exit:
+		if loadFile == "exit":
 			pass
 		else:
 			try:
