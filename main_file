@@ -988,6 +988,7 @@ class World():
 				print("that is not a craftable item")		
 		else:
 			print("invalid input")
+			
 
 def main():
 	time.sleep(1)
